@@ -1,0 +1,90 @@
+<h1>Quan ly phong ban</h1>
+<div class="card mt-4">
+    <div class="card-header">
+        <div class="row">
+            <div class="col-9"><b>Danh sách Phòng Ban</b></div>
+            <div class="col-3">
+                <button type="button" class="btn btn-info" onclick="openModalDepartment()">
+                    <i class="fa fa-plus mr-2" style="font-size:12px"></i>
+                    Thêm mới</button>
+            </div>
+        </div>
+    </div>
+    <div class="card-body">
+        <table class="table table-hover">
+            <thead class="thead-dark">
+              <tr>
+                <th scope="col">#</th>
+                <th scope="col">Tên Phòng Ban</th>
+                <th scope="col">Số lượng</th>
+              </tr>
+            </thead>
+            <tbody id ="tbodyDepartment">
+              <tr>
+                <th scope="row">1</th>
+                <td>
+                    Foo
+                </td>
+                <td>Otto</td>
+                <td>
+                    <i class='fa fa-pencil mr-2' style="font-size:24px; color : orange; cursor:pointer;"></i>
+                    <i class='fa fa-trash' style="font-size:24px; color:red; cursor:pointer"></i>
+                </td>
+              </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- Modal -->
+
+<div class="modal fade" id="exampleModalAddDepartment" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">New message</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form>
+                <div class="form-group">
+                    <label for="recipient-name" class="col-form-label">Tên Phòng Ban</label>
+                    <input type="text" class="form-control" id="input-departmentname">
+                </div>
+                <div class="form-group">
+                    <label for="recipient-name" class="col-form-label">Số lượng</label>
+                    <input type="text" class="form-control" id="input-departmentnumber">
+                </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" onclick="onSaveDepartment()">Save</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade" id="exampleModalDelDepart" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Xoa Phong Ban</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body"> 
+               <input type="text" id = "id-Departmentdelete" style = "display: none">
+                Bạn có muốn xóa <b id = "departmentName-delete">deparmentName-delete </b> không?</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Dong</button>
+                <button type="button" class="btn btn-danger" onclick="onDeleteDepartment()">Xoa</button>
+            </div>
+        </div>
+    </div>
+</div>

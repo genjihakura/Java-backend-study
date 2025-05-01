@@ -1,0 +1,147 @@
+<h1>Quản lý người dùng</h1>
+<div class="card">
+    <div class="card-header">
+      <h4>Thông tin tìm kiếm</h4>
+    </div>
+    <div class="card-body">
+        <div class="row">
+            <div class="col-4">
+                <b>Từ khóa</b>
+            </div>
+            <div class="col-3">
+                <b>Role</b>
+            </div>
+            <div class="col-3">
+                <b>Department</b>
+            </div>
+            <div class="col-2">
+                <b>Tìm kiếm</b>
+            </div>
+        </div>
+        <div class="row mt-3">
+            <div class="col-4">
+                <input type="text" class="form-control" id="input-username">
+            </div>
+            <div class="col-3">
+                <select class="form-control" >
+                    <option value="0">--Mời lựa chọn--</option>
+                    <option value="1">User</option>
+                    <option value="2">Admin</option>
+                </select>
+            </div>
+            <div class="col-3">
+                <select class="form-control" >
+                    <option value="0">--Mời lựa chọn--</option>
+                    <option value="1">Phòng Dev</option>
+                    <option value="2">Phòng Test</option>
+                </select>
+            </div>
+            <div class="col-2">
+                <button type="button" class="btn btn-primary" onclick="findeUser()">Tìm kiếm</button>  
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="card mt-4">
+    <div class="card-header">
+        <div class="row">
+            <div class="col-9"><b>Danh sách Người dùng</b></div>
+            <div class="col-3">
+                <button type="button" class="btn btn-info" onclick="openModal()">
+                    <i class="fa fa-plus mr-2" style="font-size:12px"></i>
+                    Thêm mới</button>
+            </div>
+        </div>
+    </div>
+    <div class="card-body">
+        <table class="table table-hover">
+            <thead class="thead-dark">
+              <tr>
+                <th scope="col">#</th>
+                <th scope="col">Hình đại diện</th>
+                <th scope="col">Họ và tên</th>
+                <th scope="col">Email</th>
+                <th scope="col">Ngày sinh</th>
+                <th scope="col">Hành động</th>
+              </tr>
+            </thead>
+            <tbody id = "tbodyUser">
+              <tr>
+                <th scope="row">1</th>
+                <td>
+                    <img src="" alt="Anh dai dien">
+                </td>
+                <td>Otto</td>
+                <td>@mdo</td>
+                <td>@mdo</td>
+                <td>
+                    <i class='fa fa-pencil mr-2' style="font-size:24px; color : orange; cursor:pointer;"></i>
+                    <i class='fa fa-trash' style="font-size:24px; color:red; cursor:pointer"></i>
+                </td>
+              </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- Modal -->
+
+<div class="modal fade" id="exampleModalForm" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">New message</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form>
+          <div class="form-group">
+            <label for="recipient-name" class="col-form-label">Họ và tên:</label>
+            <input type="text" class="form-control" id="input-Name">
+          </div>
+          <div class="form-group">
+              <label for="recipient-name" class="col-form-label">Avatar:</label>
+              <input type="text" class="form-control" id="input-avatar">
+          </div>
+          <div class="form-group">
+              <label for="recipient-name" class="col-form-label">Email:</label>
+              <input type="text" class="form-control" id="input-email">
+          </div>
+          <div class="form-group">
+              <label for="recipient-name" class="col-form-label">Ngày sinh:</label>
+              <input type="date" class="form-control" id="input-datOfBirth">
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary" onclick="onSave()">Save</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Xac nhan xoa user</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body"> 
+        <input type="text" id = "id-delete" style = "display: none">
+      <p>Bạn có muốn xóa <b id = "userName-delete">userName-delete </b> không?</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Dong</button>
+        <button type="button" class="btn btn-danger" onclick="onDelete()">Xoa</button>
+      </div>
+    </div>
+  </div>
+</div>
