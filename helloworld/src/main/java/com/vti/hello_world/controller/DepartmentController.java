@@ -47,8 +47,8 @@ public class DepartmentController {
     }
 
     @PutMapping("/update")
-    public Department update(@RequestBody DepartmentUpdateDto dto) {
-        return departmentService.update(dto);
+    public ResponseEntity<?> update(@RequestBody @Valid DepartmentUpdateDto dto) {
+        return ResponseEntity.ok(departmentService.update(dto));
     }
 
     @GetMapping("/find/{id}")

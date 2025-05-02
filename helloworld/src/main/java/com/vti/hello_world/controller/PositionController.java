@@ -7,12 +7,16 @@ import com.vti.hello_world.service.Impl.PositionServiceImpl;
 import com.vti.hello_world.service.PositionService;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/position")
+@Validated
 public class PositionController {
     @Autowired
     PositionService positionService;
@@ -28,13 +32,13 @@ public class PositionController {
     }
 
     @PostMapping("/create")
-    public Position createPosition(@RequestBody PositionCreateDto dto){
-        return positionService.createPosition(dto);
+    public ResponseEntity<?> createPosition(@RequestBody  @Valid PositionCreateDto dto){
+        return ResponseEntity.ok(positionService.createPosition(dto));
     }
 
     @PutMapping("/update")
-    public Position updatePosition(@RequestBody PositionUpdateDto dto){
-        return positionService.updatePosition(dto);
+    public ResponseEntity<?> updatePosition(@RequestBody @Valid PositionUpdateDto dto){
+        return ResponseEntity.ok(positionService.updatePosition(dto));
     }
 
     @DeleteMapping("/delete/{id}")

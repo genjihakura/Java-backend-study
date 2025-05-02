@@ -4,10 +4,15 @@ import com.vti.hello_world.entity.Position;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.validator.constraints.Length;
+
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 public class PositionCreateDto {
-    Position.PositionName PositionName;
+    @NotNull(message = "vi tri khong de rong")
+    Position.PositionName positionName;
 }

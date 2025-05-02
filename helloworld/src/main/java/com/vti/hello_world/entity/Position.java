@@ -16,11 +16,11 @@ import java.util.Date;
 public class Position {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int Id;
+    private int id;
 
     @Column(name = "POSITION_NAME", nullable = false)
     @Enumerated(EnumType.STRING)
-    private PositionName PositionName;
+    private PositionName positionName;
 
     public static enum PositionName{
         DEV,

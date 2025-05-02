@@ -10,7 +10,6 @@ import javax.validation.constraints.NotBlank;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-
 public class DepartmentCreateDto {
     @NotBlank(message = "Ten phong ban ko de trong")
     @Length(max = 50, message = "Ten phong ban khong duoc qua 50 ky tu")
