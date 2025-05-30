@@ -4,7 +4,10 @@ import com.vti.bep3.entity.MenuItem;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.Optional;
+
 @Repository
 public interface MenuItemRepository extends JpaRepository<MenuItem, Integer> {
     MenuItem findByName(String name);
+    Optional<MenuItem> findById(int id);
 }

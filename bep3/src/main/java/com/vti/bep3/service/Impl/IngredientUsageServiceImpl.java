@@ -6,6 +6,7 @@ import com.vti.bep3.entity.IngredientStore;
 import com.vti.bep3.entity.IngredientUsage;
 import com.vti.bep3.dto.IngredientUsageUpdate;
 import com.vti.bep3.entity.MenuItem;
+import com.vti.bep3.exception.LogicCustomException;
 import com.vti.bep3.responsitory.IngredientRepository;
 import com.vti.bep3.responsitory.IngredientUsageRepository;
 import com.vti.bep3.responsitory.MenuItemRepository;
@@ -34,8 +35,13 @@ public class IngredientUsageServiceImpl implements IngredientUsageSerice {
         IngredientUsage optional = findByName(dto.getName());
 
         if(optional != null){
-            return null;
+            System.err.println("Ten nguyen lieu da ton tai");
+            LogicCustomException exception = new LogicCustomException();
+            exception.setCode(500);
+            exception.setMessage("Ten nguyen lieu da ton tai");
+            throw exception;
         }
+
         IngredientStore inStore = ingredientStoreRepository.findByName(dto.getName());
 
         if(inStore != null){
@@ -59,8 +65,11 @@ public class IngredientUsageServiceImpl implements IngredientUsageSerice {
 
         IngredientUsage optional = findByName(dto.getIngredientName());
         if(optional == null){
-            System.err.println("khong tim thay ten hang");
-            return null;
+            System.err.println("khong tim thay ten nguyen lieu trong mon an");;
+            LogicCustomException exception = new LogicCustomException();
+            exception.setCode(500);
+            exception.setMessage("khong tim thay ten nguyen lieu trong mon an");
+            throw exception;
         }
         optional.setIngredientId(dto.getIngredientId());
         optional.setMenuItemId(dto.getMenuItemId());

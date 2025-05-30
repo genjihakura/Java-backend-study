@@ -5,6 +5,7 @@ import com.vti.bep3.dto.MenuItemUpdateDto;
 import com.vti.bep3.entity.IngredientStore;
 import com.vti.bep3.entity.IngredientUsage;
 import com.vti.bep3.entity.MenuItem;
+import com.vti.bep3.exception.LogicCustomException;
 import com.vti.bep3.responsitory.IngredientRepository;
 import com.vti.bep3.responsitory.IngredientUsageRepository;
 import com.vti.bep3.responsitory.MenuItemRepository;
@@ -32,8 +33,11 @@ public class MenuItemServiceImpl implements MenuItemService {
         MenuItem entity = menuItemRepository.findByName(dto.getName());
 
         if(entity != null){
-            System.out.println("Ten mon an da ton tai");
-            return null;
+            System.err.println("Ten mon an da ton tai");
+            LogicCustomException exception = new LogicCustomException();
+            exception.setCode(500);
+            exception.setMessage("Ten mon an da ton tai");
+            throw exception;
         }
         MenuItem newDeal = new MenuItem();
         newDeal.setName(dto.getName());
@@ -60,7 +64,7 @@ public class MenuItemServiceImpl implements MenuItemService {
                     }
                 //  System.out.println(min);
                 }
-                if (min != 1e6) {
+                if (min != 1e6 && min >= 0) {
                     menuItem.setNumberAvailable((int) min);
                     menuItemRepository.save(menuItem);
                 }
@@ -73,7 +77,11 @@ public class MenuItemServiceImpl implements MenuItemService {
         int id = dto.getId();
         Optional<MenuItem> optional = menuItemRepository.findById(id);
         if (optional.isEmpty()) {
-            throw new RuntimeException("Không tìm thấy món ăn có id: " + dto.getId());
+            System.err.println("Không tìm thấy món ăn có id: " + dto.getId());
+            LogicCustomException exception = new LogicCustomException();
+            exception.setCode(500);
+            exception.setMessage("Không tìm thấy món ăn có id: " + dto.getId());
+            throw exception;
         }
 
         MenuItem item = optional.get();
@@ -89,10 +97,6 @@ public class MenuItemServiceImpl implements MenuItemService {
     }
 
     public MenuItem findByName(String name){
-        MenuItem optional = menuItemRepository.findByName(name);
-        if(optional == null){
-            return null;
-        }
-        return optional;
+        return menuItemRepository.findByName(name);
     }
 }

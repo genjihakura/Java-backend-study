@@ -1,9 +1,8 @@
 package com.vti.bep3.utils;
 
 import com.vti.bep3.entity.Staff;
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
+import com.vti.bep3.exception.LogicCustomException;
+import io.jsonwebtoken.*;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;
@@ -41,6 +40,12 @@ public class JwtUtils {
                     .setSigningKey(SECRET)
                     .parseClaimsJws(token).getBody();
             // Lấy ra các thông tin -> phục vụ các bước tiếp theo (xác thưucj và phân quyền)
+            if(claims == null){
+                LogicCustomException exception = new LogicCustomException();
+                exception.setCode(500);
+                exception.setMessage("token không hợp lệ");
+                throw exception;
+            }
             Date expirationDate = claims.getExpiration();
             long expirationLong = expirationDate.getTime();
             long nowLong = new Date().getTime();
@@ -57,10 +62,34 @@ public class JwtUtils {
             authorities.add(role);
             return new UsernamePasswordAuthenticationToken(userName, null, authorities);
 
-        } catch (Exception e) {
+        }   catch (ExpiredJwtException e) {
+            System.err.println("Token đã hết hạn!");
+            LogicCustomException exception = new LogicCustomException();
+            exception.setCode(403);
+            exception.setMessage("Token đã hết hạn!");
+            throw exception;
+
+        } catch (SignatureException e) {
+            System.err.println("Chữ ký token không hợp lệ!");
+            LogicCustomException exception = new LogicCustomException();
+            exception.setCode(403);
+            exception.setMessage("Chữ ký token không hợp lệ!");
+            throw exception;
+        }
+//        catch (MalformedJwtException e) {
+//            System.err.println("Token bị sai định dạng!");
+//            LogicCustomException exception = new LogicCustomException();
+//            exception.setCode(403);
+//            exception.setMessage("Token bị sai định dạng!");
+//            throw exception;
+//        }
+        catch (Exception e) {
             System.err.println("Token không hợp lệ");
-            e.printStackTrace();
-            return null;
+//            e.printStackTrace();
+            LogicCustomException exception = new LogicCustomException();
+            exception.setCode(403);
+            exception.setMessage("Token không hợp lệ");
+            throw exception;
         }
     }
 }

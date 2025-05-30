@@ -42,18 +42,25 @@ public class CustomerOrderServiceImpl implements CustomerOrderService {
     private CustomerOrder getCustomerOrder(CustomerOrderCreateDto dto, CustomerOrder savedOrder, double total_price) {
         for (CustomerOrderCreateDto.OrderItemDto itemDto : dto.getItems()) {
             // Kiểm tra món ăn có tồn tại không (optional)
-            MenuItem menuItem = menuItemRepository.findById(itemDto.getMenuItemId())
-                    .orElseThrow(() -> new RuntimeException("Menu item not found"));
+            Optional<MenuItem> menuItem = menuItemRepository.findById(itemDto.getMenuItemId());
+
+            if(menuItem.isEmpty()) {
+                System.err.println("không tim thấy món ăn");
+                LogicCustomException exception = new LogicCustomException();
+                exception.setCode(500);
+                exception.setMessage("không tim thấy món ăn");
+                throw exception;
+            }
 
             OrderItem orderItem = new OrderItem();
             orderItem.setOrderId(savedOrder.getId());
             orderItem.setMenuItemId(itemDto.getMenuItemId());
             orderItem.setQuantity(itemDto.getQuantity());
-            total_price += itemDto.getQuantity() * menuItem.getPrice();
+            total_price += itemDto.getQuantity() * menuItem.get().getPrice();
 
-            Optional<MenuItem> optional = menuItemRepository.findById(menuItem.getId());
+            Optional<MenuItem> optional = menuItemRepository.findById(menuItem.get().getId());
             if(optional.isEmpty()){
-                throw new RuntimeException("Không tìm thấy món ăn có id: " + menuItem.getId());
+                throw new RuntimeException("Không tìm thấy món ăn có id: " + menuItem.get().getId());
             }
             MenuItem item = optional.get();
             Integer numberAvailable = item.getNumberAvailable();
@@ -75,12 +82,17 @@ public class CustomerOrderServiceImpl implements CustomerOrderService {
 
     private void updateNumAvailable(MenuItem menuItem, Integer quantity) {
         List<IngredientUsage> LsingreUsages = ingredientUsage.findByMenuItemId(menuItem.getId());
-        // Món ăn có bao nhiêu nguyên liệu trong LsingreUsages
-        // lấy sô liệu trong ingreUsage nhân với số lượng đơn hàng rồi trừ ra và cập nhật lại vô kho
-        if(LsingreUsages != null){
+        if(LsingreUsages == null)
+        {
+            throw new RuntimeException("Menu item not found Ingredient");
+        }
+        else
+        {
+            // Món ăn có bao nhiêu nguyên liệu trong LsingreUsages
+            // lấy sô liệu trong ingreUsage nhân với số lượng đơn hàng rồi trừ ra và cập nhật lại vô kho
             double minNum = 1e6;
-            for (IngredientUsage ingre :  LsingreUsages) {
-
+            for (IngredientUsage ingre :  LsingreUsages)
+            {
                 IngredientStore ItemInStore = inStoreRepository.findByName(ingre.getName());
                 if(ItemInStore != null) {
                     Double updateIteminStore = ItemInStore.getQuantityInStock() - (Double)(quantity * ingre.getQuantityUsed());
@@ -88,6 +100,12 @@ public class CustomerOrderServiceImpl implements CustomerOrderService {
                     Double scaleItem = updateIteminStore /  ingre.getQuantityUsed();
                     minNum = Math.min(minNum, scaleItem);
                     inStoreRepository.save(ItemInStore);
+                } else {
+                    System.err.println("không tim thấy nguyên liệu");
+                    LogicCustomException exception = new LogicCustomException();
+                    exception.setCode(500);
+                    exception.setMessage("không tim thấy nguyên liệu");
+                    throw exception;
                 }
                 //  System.out.println(min);
             }
@@ -109,7 +127,6 @@ public class CustomerOrderServiceImpl implements CustomerOrderService {
 
     @Override
     public CustomerOrder updateOrder(int id, CustomerOrderCreateDto dto) {
-
         CustomerOrder order = findById(id);
         double total_price = order.getTotalPrice();
         return getCustomerOrder(dto, order, total_price);

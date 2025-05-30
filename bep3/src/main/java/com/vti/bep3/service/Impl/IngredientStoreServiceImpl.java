@@ -37,30 +37,28 @@ public class IngredientStoreServiceImpl implements IngredientStoreService {
             entity.setName(ingredient.getName());
             entity.setQuantityInStock(ingredient.getQuantityInStock());
             entity.setUnit(ingredient.getUnit());
-
             ingredientRepository.save(entity);
             return entity;
+        } else {
+            System.err.println("Ten nguyen lieu da ton tai");
+            LogicCustomException exception = new LogicCustomException();
+            exception.setCode(500);
+            exception.setMessage("Ten nguyen lieu da ton tai");
+            throw exception;
         }
-        return null;
     }
 
     @Override
     public IngredientStore update(IngredientStoreUpdate ingredient) {
         IngredientStore entity = findByName(ingredient.getName());
         if(entity == null){
-            System.err.println("Ten Hang khong ton tai");
-            LogicCustomException exception = new LogicCustomException();
-            exception.setCode(500);
-            exception.setMessage("Ten Hang khong ton tai");
-            throw exception;
+            return null;
         }
-        IngredientStore dto = new IngredientStore();
-        dto.setId(entity.getId());
-        dto.setName(ingredient.getName());
-        dto.setUnit(ingredient.getUnit());
-        dto.setQuantityInStock(ingredient.getQuantityInStock());
-        ingredientRepository.save(dto);
-        return null;
+        entity.setName(ingredient.getName());
+        entity.setUnit(ingredient.getUnit());
+        entity.setQuantityInStock(ingredient.getQuantityInStock());
+        ingredientRepository.save(entity);
+        return entity;
     }
 
     @Override
@@ -71,8 +69,12 @@ public class IngredientStoreServiceImpl implements IngredientStoreService {
 
     public IngredientStore findByName(String name){
         IngredientStore optional = ingredientRepository.findByName(name);
-        if(optional==null){
-            return null;
+        if(optional == null){
+            System.err.println("Ten Hang khong ton tai");
+            LogicCustomException exception = new LogicCustomException();
+            exception.setCode(500);
+            exception.setMessage("Ten Hang khong ton tai");
+            throw exception;
         }
         return optional;
     }

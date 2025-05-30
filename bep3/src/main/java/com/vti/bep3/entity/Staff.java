@@ -6,6 +6,8 @@ import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 
 import javax.persistence.*;
+import java.util.Date;
+
 // nhân viên
 @Data
 @Table(name = "Staff")
@@ -49,4 +51,22 @@ public class Staff {
 
     @Column(name = "password")
     private String password;
+
+    @Column(name = "Create_Date")
+    private Date createDate;
+
+    @Column(name = "Update_Date")
+    private Date updateDate;
+
+    @PrePersist
+    public void doCreate(){
+        // Hàm này được gọi khi có sự kiện thêm mới xảy ra
+        this.createDate = new Date();
+    }
+
+    @PreUpdate
+    public void doUpdate(){
+        // Hàm này được gọi khi có sự kiện update xảy ra
+        this.updateDate = new Date();
+    }
 }

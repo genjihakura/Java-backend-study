@@ -25,6 +25,11 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Autowired
     private JwtRequestFilter jwtRequestFilter;
 
+    private static final String[] WHITE_LIST_URL = { "/api/v1/auth/**", "/v2/api-docs", "/v3/api-docs",
+            "/v3/api-docs/**", "/swagger-resources", "/swagger-resources/**", "/configuration/ui",
+            "/configuration/security", "/swagger-ui/**", "/webjars/**", "/swagger-ui.html", "/api/auth/**",
+            "/api/test/**", "/authenticate" };
+
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.userDetailsService(accountService).// Cấu hình UserDetailsService để khi xác thực người dùng sẽ gọi tới hàm loadUserByUsername()
@@ -35,19 +40,20 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
 // config những API ko cần xác thực
-                .antMatchers("/api/v1/menu/", "/api/auth/login-jwt").permitAll()
-
+                .antMatchers( "/api/v1/auth/**", "/v2/api-docs", "/v3/api-docs",
+                        "/v3/api-docs/**", "/swagger-resources", "/swagger-resources/**",
+                        "/swagger-ui/**", "/webjars/**", "/swagger-ui.html", "/api/auth/**",
+                        "/api/v1/menu/",
+                        "/api/v1/auth/login-jwt").permitAll()
 // Config những API phải có Authority là ADMIN thì mới được truy cập
-                .antMatchers("api/v1/**").hasAuthority("ADMIN")
-
-//                .antMatchers("/api/v1/department").hasAuthority("ADMIN")
+                .antMatchers("/api/v1/staff/**","/api/v1/menu/**","/api/v1/IngredientStore/**" ).hasAuthority("ADMIN")
 // Config những API phải có Authority là ADMIN hoặc User thì mới được truy cập
-                .antMatchers( "api/v1/orders/**").hasAuthority("EMPLOYEE")
-                .antMatchers("api/admin-or-user").hasAnyAuthority("ADMIN", "EMPLOYEE")
-
+                .antMatchers( "/api/v1/orders/**").hasAuthority("EMPLOYEE")
+                // Config những API phải có Authority là ADMIN hoặc User thì mới được truy cập
+                .antMatchers("api/admin-or-user").hasAnyAuthority("ADMIN", "User")
                 .anyRequest().authenticated()// Những đường dẫn còn lại cần được xác thực
-
-                .and().httpBasic()// Kích hoạt cấu hình http basic trong Spring Security
+                .and().httpBasic()
+                // Kích hoạt cấu hình http basic trong Spring Security
 
 // tắt tính năng Cross-Site Request Forgery (CSRF) trong Spring Security.
                 .and().cors().and().csrf().disable();
