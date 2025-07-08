@@ -30,66 +30,66 @@ public class JwtUtils {
                 .claim("user-Agent", httpServletRequest.getHeader("User-Agent")).compact(); // Thông tin trình duyệt đang sử dụng
     }
 
-    public static UsernamePasswordAuthenticationToken checkToken(String token, HttpServletRequest httpServletRequest) {
-        try {
-            if (StringUtils.isBlank(token)) { // token bị trống -> lỗi
-                System.out.println("Không có token!");
-                return null;
-            }
-            Claims claims = Jwts.parser() // Đối tượng giải mã token
-                    .setSigningKey(SECRET)
-                    .parseClaimsJws(token).getBody();
-            // Lấy ra các thông tin -> phục vụ các bước tiếp theo (xác thưucj và phân quyền)
-            if(claims == null){
-                LogicCustomException exception = new LogicCustomException();
-                exception.setCode(500);
-                exception.setMessage("token không hợp lệ");
-                throw exception;
-            }
-            Date expirationDate = claims.getExpiration();
-            long expirationLong = expirationDate.getTime();
-            long nowLong = new Date().getTime();
-            if (expirationLong < nowLong){
-                System.err.println("Token đã hết hạn");
-                return null;
-            }
-            String userName = claims.getSubject();
-            Staff.Role role = Staff.Role.valueOf(claims.get("role").toString());
-            String userAgent = claims.get("user-Agent").toString(); // Thông tin trình duyệt đăng nhập từ trước
-            String userAgentNow = httpServletRequest.getHeader("User-Agent"); // Thong tin trình duyệt đang đăng nhập
-
-            List<GrantedAuthority> authorities = new ArrayList<>();
-            authorities.add(role);
-            return new UsernamePasswordAuthenticationToken(userName, null, authorities);
-
-        }   catch (ExpiredJwtException e) {
-            System.err.println("Token đã hết hạn!");
-            LogicCustomException exception = new LogicCustomException();
-            exception.setCode(403);
-            exception.setMessage("Token đã hết hạn!");
-            throw exception;
-
-        } catch (SignatureException e) {
-            System.err.println("Chữ ký token không hợp lệ!");
-            LogicCustomException exception = new LogicCustomException();
-            exception.setCode(403);
-            exception.setMessage("Chữ ký token không hợp lệ!");
-            throw exception;
-        }
-//        catch (MalformedJwtException e) {
-//            System.err.println("Token bị sai định dạng!");
+//    public static UsernamePasswordAuthenticationToken checkToken(String token, HttpServletRequest httpServletRequest) {
+//        try {
+//            if (StringUtils.isBlank(token)) { // token bị trống -> lỗi
+//                System.out.println("Không có token!");
+//                return null;
+//            }
+//            Claims claims = Jwts.parser() // Đối tượng giải mã token
+//                    .setSigningKey(SECRET)
+//                    .parseClaimsJws(token).getBody();
+//            // Lấy ra các thông tin -> phục vụ các bước tiếp theo (xác thưucj và phân quyền)
+//            if(claims == null){
+//                LogicCustomException exception = new LogicCustomException();
+//                exception.setCode(500);
+//                exception.setMessage("token không hợp lệ");
+//                throw exception;
+//            }
+//            Date expirationDate = claims.getExpiration();
+//            long expirationLong = expirationDate.getTime();
+//            long nowLong = new Date().getTime();
+//            if (expirationLong < nowLong){
+//                System.err.println("Token đã hết hạn");
+//                return null;
+//            }
+//            String userName = claims.getSubject();
+//            Staff.Role role = Staff.Role.valueOf(claims.get("role").toString());
+//            String userAgent = claims.get("user-Agent").toString(); // Thông tin trình duyệt đăng nhập từ trước
+//            String userAgentNow = httpServletRequest.getHeader("User-Agent"); // Thong tin trình duyệt đang đăng nhập
+//
+//            List<GrantedAuthority> authorities = new ArrayList<>();
+//            authorities.add(role);
+//            return new UsernamePasswordAuthenticationToken(userName, null, authorities);
+//
+//        }   catch (ExpiredJwtException e) {
+//            System.err.println("Token đã hết hạn!");
 //            LogicCustomException exception = new LogicCustomException();
 //            exception.setCode(403);
-//            exception.setMessage("Token bị sai định dạng!");
+//            exception.setMessage("Token đã hết hạn!");
+//            throw exception;
+//
+//        } catch (SignatureException e) {
+//            System.err.println("Chữ ký token không hợp lệ!");
+//            LogicCustomException exception = new LogicCustomException();
+//            exception.setCode(403);
+//            exception.setMessage("Chữ ký token không hợp lệ!");
 //            throw exception;
 //        }
-        catch (Exception e) {
-            System.err.println("Token không hợp lệ");
-//            e.printStackTrace();
-            LogicCustomException exception = new LogicCustomException();
-            exception.setCode(403);
-            exception.setMessage("Token không hợp lệ");
-            throw exception;
-        }
-    }
+////        catch (MalformedJwtException e) {
+////            System.err.println("Token bị sai định dạng!");
+////            LogicCustomException exception = new LogicCustomException();
+////            exception.setCode(403);
+////            exception.setMessage("Token bị sai định dạng!");
+////            throw exception;
+////        }
+//        catch (Exception e) {
+//            System.err.println("Token không hợp lệ");
+////            e.printStackTrace();
+//            LogicCustomException exception = new LogicCustomException();
+//            exception.setCode(403);
+//            exception.setMessage("Token không hợp lệ");
+//            throw exception;
+//        }
+//    }
 }

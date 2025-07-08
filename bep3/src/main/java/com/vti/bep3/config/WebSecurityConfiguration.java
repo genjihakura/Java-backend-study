@@ -40,26 +40,26 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
 // config những API ko cần xác thực
-                .antMatchers( "/api/v1/auth/**", "/v2/api-docs", "/v3/api-docs",
-                        "/v3/api-docs/**", "/swagger-resources", "/swagger-resources/**",
-                        "/swagger-ui/**", "/webjars/**", "/swagger-ui.html", "/api/auth/**",
+                .antMatchers( "/api/v1/auth/**", "/v3/api-docs",
+                        "/v3/api-docs/**", "/swagger-resources/", "/swagger-resources/**",
+                        "/swagger-ui/**",  "/swagger-ui.html", "/api/auth/**",
                         "/api/v1/menu/",
                         "/api/v1/auth/login-jwt").permitAll()
 // Config những API phải có Authority là ADMIN thì mới được truy cập
-                .antMatchers("/api/v1/staff/**","/api/v1/menu/**","/api/v1/IngredientStore/**" ).hasAuthority("ADMIN")
+//                .antMatchers("/api/v1/staff/**","/api/v1/menu/**","/api/v1/IngredientStore/**" ).hasAuthority("ADMIN")
 // Config những API phải có Authority là ADMIN hoặc User thì mới được truy cập
+                .antMatchers( "/api/v1/**").hasAuthority("ADMIN")
                 .antMatchers( "/api/v1/orders/**").hasAuthority("EMPLOYEE")
                 // Config những API phải có Authority là ADMIN hoặc User thì mới được truy cập
                 .antMatchers("api/admin-or-user").hasAnyAuthority("ADMIN", "User")
                 .anyRequest().authenticated()// Những đường dẫn còn lại cần được xác thực
                 .and().httpBasic()
                 // Kích hoạt cấu hình http basic trong Spring Security
-
 // tắt tính năng Cross-Site Request Forgery (CSRF) trong Spring Security.
                 .and().cors().and().csrf().disable();
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 
-        http.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
+//        http.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
     }
 
     @Override // Config cho đường dẫn (swagger) ko bị chặn bởi security

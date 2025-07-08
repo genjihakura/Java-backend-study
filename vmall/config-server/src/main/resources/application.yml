@@ -1,0 +1,10 @@
+server:
+  port: 6969
+spring:
+  profiles:
+    include: native
+  cloud:
+    config:
+      server:
+        native:
+          searchLocations: file:config-server/configs

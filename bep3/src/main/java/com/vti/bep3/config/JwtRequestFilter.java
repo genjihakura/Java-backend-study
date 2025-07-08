@@ -18,15 +18,15 @@ public class JwtRequestFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         // B1: Lấy giá trị token
-        String token = request.getHeader("Authorization") != null ? request.getHeader("Authorization").substring(7) : "";
+//        String token = request.getHeader("Authorization") != null ? request.getHeader("Authorization").substring(7) : "";
 
         //B2: Giải mã token (nếu token ko hợp lệ, hết hạn,.. -> trả về null thông tin đăng nhập)
-        UsernamePasswordAuthenticationToken authentication = JwtUtils.checkToken(token, request);
+//        UsernamePasswordAuthenticationToken authentication = JwtUtils.checkToken(token, request);
 
         // Set đối tượng Athen trên vào Context
-        SecurityContextHolder.getContext().setAuthentication(authentication);
+//        SecurityContextHolder.getContext().setAuthentication(authentication);
 
         //B3: do fillter -> bước tiêp theo
-        filterChain.doFilter(request, response);
+//        filterChain.doFilter(request, response);
     }
 }

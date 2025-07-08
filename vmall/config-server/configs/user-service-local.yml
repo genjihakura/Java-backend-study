@@ -1,0 +1,4 @@
+DB_URL: jdbc:mysql://192.168.244.133:3306/vlall_user
+DB_USERNAME: root
+DB_PASSWORD: root
+SERVER_PORT: 8082
