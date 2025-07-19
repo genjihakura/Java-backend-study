@@ -5,6 +5,6 @@ import vn.vti.dtn2501.mall.entity.ProductCategory;
 
 import java.util.Optional;
 
-public interface ProductCategoryRepository extends JpaRepository<ProductCategory,Long> {
+public interface ProductCategoryRepository extends JpaRepository<ProductCategory, Long> {
     Optional<ProductCategory> findByCategoryName(String name);
 }

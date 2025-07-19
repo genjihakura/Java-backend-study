@@ -2,3 +2,10 @@ DB_URL: jdbc:mysql://192.168.244.133:3306/vmall_mall
 DB_USERNAME: root
 DB_PASSWORD: root
 SERVER_PORT: 8081
+
+spring:
+  sql:
+    init:
+      mode: always
+      schema-locations: classpath:schema.sql
+      data-locations: classpath:temp_data.sql

@@ -22,6 +22,7 @@ spring:
         max-interval: 2000
         #        7
         multiplier: 1.1
+
 #1 Timeout on waiting to connect to the config server (ms)
 #2 Timeout on waiting to read configuration data from the config server (ms)
 #3 Makes a failure to connect to the config server fatal

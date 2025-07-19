@@ -1,0 +1,30 @@
+# 🧱 Stage 1: Build with Maven and JDK 21
+FROM maven:3.9.6-eclipse-temurin-21 AS builder
+
+WORKDIR /app
+
+# Copy source
+COPY pom.xml .
+COPY src ./src
+
+# Build jar file
+RUN mvn clean package -DskipTests
+
+# 🧪 Nếu bạn muốn chạy test, bỏ `-DskipTests`
+
+# 🚀 Stage 2: Run with JDK 21 only (no Maven)
+FROM eclipse-temurin:21-jdk AS runner
+
+WORKDIR /app
+
+# Copy the built jar from builder stage
+COPY --from=builder /app/target/*.jar app.jar
+
+# Optional: expose port (default Spring Boot is 8080)
+EXPOSE 8761
+
+# Set JVM options if needed
+ENV JAVA_OPTS="-Xms256m -Xmx512m"
+
+# Run the application
+ENTRYPOINT ["sh", "-c", "java $JAVA_OPTS -jar app.jar"]

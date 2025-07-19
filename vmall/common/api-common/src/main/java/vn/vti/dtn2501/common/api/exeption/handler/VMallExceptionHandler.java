@@ -1,0 +1,57 @@
+package vn.vti.dtn2501.common.api.exeption.handler;
+
+import java.nio.charset.StandardCharsets;
+import java.util.Locale;
+import java.util.ResourceBundle;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.annotation.ControllerAdvice;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+import vn.vti.dtn2501.common.api.exeption.VMallException;
+import vn.vti.dtn2501.common.api.exeption.VMallExceptionInfo;
+import vn.vti.dtn2501.common.api.response.ApiResponse;
+
+@Configuration
+@ControllerAdvice
+@Slf4j
+public class VMallExceptionHandler {
+  public static final String BASE_NAME = "messages";
+
+  @ExceptionHandler(VMallException.class)
+  public ResponseEntity<ApiResponse<?>> handleRestException(VMallException e){
+    VMallExceptionInfo exceptionInfo = e.getExceptionInfo();
+    return ResponseEntity.status(exceptionInfo.getHttpStatus()).body(ApiResponse.error(
+        getErrorMessage(Locale.getDefault(), exceptionInfo.getErrorCode(), exceptionInfo.getErrorDescription())
+    ));
+  }
+
+  @ExceptionHandler(MethodArgumentNotValidException.class)
+  public ResponseEntity<ApiResponse<?>> handleValidationExceptions(MethodArgumentNotValidException e) {
+    return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+        .body(
+            ApiResponse.error(e.getMessage())
+        );
+  }
+
+  @ExceptionHandler(Exception.class)
+  public ResponseEntity<ApiResponse<?>> handleValidationExceptions(Exception e) {
+    return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+        .body(
+            ApiResponse.error(e.getMessage())
+        );
+  }
+
+  private String getErrorMessage(Locale locale, String key, String defaultValue) {
+    try {
+      ResourceBundle resourceBundle = ResourceBundle.getBundle(BASE_NAME, locale);
+      String val = resourceBundle.getString(key);
+      return new String(val.getBytes(StandardCharsets.UTF_8), StandardCharsets.UTF_8);
+    } catch (Exception e) {
+      log.error("getErrorMessage - Exception with message: [{}]", e.getMessage());
+      return defaultValue;
+    }
+  }
+}

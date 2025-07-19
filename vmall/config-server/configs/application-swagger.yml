@@ -1,0 +1,11 @@
+springdoc:
+  swagger-ui:
+    oauth:
+      use-pkce-with-authorization-code-grant: ${SPRING_DOC_SWAGGER_UI_OAUTH_PKCE_ENABLED:false}
+      use-basic-authentication-with-access-code-grant: ${SPRING_DOC_SWAGGER_UI_CLIENT_BASIC_AUTH_ENABLED:true}
+  oauthflow:
+    authorization-url: ${SPRING_DOC_OAUTH_FLOW_AUTHORIZATION_URL:http://localhost:8082/oauth2/authorize}
+    token-url: ${SPRING_DOC_OAUTH_FLOW_TOKEN_URL:http://localhost:8082/oauth2/token}
+
+
+

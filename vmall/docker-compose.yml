@@ -1,0 +1,109 @@
+services:
+  discovery-service:
+    build:
+      context: ./discovery-service
+      dockerfile: Dockerfile
+    ports:
+      - "8761:8761"
+    networks:
+      - vmall-network
+
+  config-server:
+    build:
+      context: ./config-server
+      dockerfile: Dockerfile
+    ports:
+      - "6969:6969"
+    networks:
+      - vmall-network
+    environment:
+      CONFIG_LOCATION: ./configs
+
+  api-gateway:
+    build:
+      context: ./api-gateway
+      dockerfile: Dockerfile
+    ports:
+      - "8888:8888"
+    environment:
+      EUREKA_SERVER: http://discovery-service:8761/eureka
+    networks:
+      - vmall-network
+
+  user-service:
+    build:
+      context: ./user-service
+      dockerfile: Dockerfile
+    ports:
+      - "8082:8082"
+    networks:
+      - vmall-network
+    environment:
+      SPRING_PROFILES_ACTIVE: mysql,swagger,rabbitmq
+      CONFIG_SERVER_URL: http://config-server:6969
+      EUREKA_SERVER: http://discovery-service:8761/eureka
+      SERVER_PORT: 8082
+      DB_URL: jdbc:mysql://192.168.244.133:3306/vmall_user
+      DB_USERNAME: root
+      DB_PASSWORD: root
+      RABBIT_MQ_HOST: 192.168.244.133
+      RABBIT_MQ_PORT: 5672
+      RABBIT_MQ_USER: guest
+      RABBIT_MQ_PASSWORD: guest
+      RABBIT_MQ_VIRTUAL_HOST: /
+      QUEUE_SEND_NOTIFICATION_QUEUE_NAME: local.send.notification.queue
+      QUEUE_SEND_NOTIFICATION_EXCHANGE: local.send.notification.exchange
+      QUEUE_SEND_NOTIFICATION_ROUTING_KEY: local.send.notification.routing-key
+    depends_on:
+      - config-server
+      - discovery-service
+
+  notification-service:
+    build:
+      context: ./nofitication-service
+      dockerfile: Dockerfile
+    networks:
+      - vmall-network
+    environment:
+      SPRING_PROFILES_ACTIVE: mysql,swagger,rabbitmq
+      CONFIG_SERVER_URL: http://config-server:6969
+      EUREKA_SERVER: http://discovery-service:8761/eureka
+      AUTH_SERVER: http://user-service:8082
+      DB_URL: jdbc:mysql://192.168.244.133:3306/vmall_notification
+      DB_USERNAME: root
+      DB_PASSWORD: root
+      RABBIT_MQ_HOST: 192.168.244.133
+      RABBIT_MQ_PORT: 5672
+      RABBIT_MQ_USER: guest
+      RABBIT_MQ_PASSWORD: guest
+      RABBIT_MQ_VIRTUAL_HOST: /
+      QUEUE_SEND_NOTIFICATION_QUEUE_NAME: local.send.notification.queue
+      QUEUE_SEND_NOTIFICATION_EXCHANGE: local.send.notification.exchange
+      QUEUE_SEND_NOTIFICATION_ROUTING_KEY: local.send.notification.routing-key
+    depends_on:
+      - config-server
+      - discovery-service
+
+  mall-service:
+    build:
+      context: ./mall-service
+      dockerfile: Dockerfile
+    ports:
+      - "8081:8080"
+    networks:
+      - vmall-network
+    environment:
+      SPRING_PROFILES_ACTIVE: mysql,swagger
+      CONFIG_SERVER_URL: http://config-server:6969
+      EUREKA_SERVER: http://discovery-service:8761/eureka
+      AUTH_SERVER: http://user-service:8082
+      DB_URL: jdbc:mysql://192.168.244.133:3306/vmall_mall
+      DB_USERNAME: root
+      DB_PASSWORD: root
+    depends_on:
+      - config-server
+      - discovery-service
+
+networks:
+  vmall-network:
+    driver: bridge
