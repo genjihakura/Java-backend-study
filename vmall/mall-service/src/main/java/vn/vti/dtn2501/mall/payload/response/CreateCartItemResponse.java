@@ -13,6 +13,6 @@ public class CreateCartItemResponse {
     private Long cartId;
     private Long productId;
     private String productName;
-    private BigDecimal productPrice;
+    private Double productPrice;
     private Long quantity;
 }

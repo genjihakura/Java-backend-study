@@ -3,14 +3,19 @@ package vn.vti.dtn2501.mall.service.impl;
 
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import vn.vti.dtn2501.common.api.exeption.VMallException;
+import vn.vti.dtn2501.mall.client.NotificationClient;
 import vn.vti.dtn2501.mall.entity.Cart;
 import vn.vti.dtn2501.mall.entity.CartItem;
 import vn.vti.dtn2501.mall.entity.OrderItem;
 import vn.vti.dtn2501.mall.entity.OrderUser;
+import vn.vti.dtn2501.mall.entity.users.UserDto;
 import vn.vti.dtn2501.mall.exception.ExceptionEnum;
 import vn.vti.dtn2501.mall.payload.request.CreateOrderRequest;
+import vn.vti.dtn2501.mall.payload.request.SendNotificationRequest;
+import vn.vti.dtn2501.mall.payload.response.CreateOrderResponse;
 import vn.vti.dtn2501.mall.repository.CartRepository;
 import vn.vti.dtn2501.mall.repository.OrderItemRepository;
 import vn.vti.dtn2501.mall.repository.OrderRepository;
@@ -18,10 +23,9 @@ import vn.vti.dtn2501.mall.service.ICartItemService;
 import vn.vti.dtn2501.mall.service.ICartService;
 import vn.vti.dtn2501.mall.service.IOrderService;
 import vn.vti.dtn2501.mall.service.IProductService;
+import vn.vti.dtn2501.queue.common.Producer;
 
-import java.math.BigDecimal;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -33,10 +37,14 @@ public class OrderServiceImpl implements IOrderService {
     private final IProductService productService;
     private final OrderItemRepository orderItemRepository;
     private final CartRepository cartRepository;
+    private final NotificationClient notificationClient;
+    private final Producer<SendNotificationRequest> producer;
+    @Value("${discountAmount}")
+    private double discountAmount = 1;
 
     @Transactional
     @Override
-    public OrderUser createOrder(CreateOrderRequest request) {
+    public CreateOrderResponse createOrder(CreateOrderRequest request) {
         Cart cart = cartService.getActiveCart(request.getUserId());
         if(cart == null){
             throw new VMallException(ExceptionEnum.CART_NO_EXISTS);
@@ -52,19 +60,12 @@ public class OrderServiceImpl implements IOrderService {
             throw new VMallException(ExceptionEnum.CART_ITEM_IS_EMPTY);
         }
 
-        // Tính tổng tiền cho đơn hàng
-        BigDecimal totalAmount = cartItems.stream()
-                .map(item -> item.getProductPrice().multiply(new BigDecimal(item.getQuantity())))
-                .reduce(BigDecimal.ZERO, BigDecimal::add);
+//        // Tính tổng tiền cho đơn hàng
+        Double totalAmount = 0.0;
 
         // Tạo đơn hàng mới
         OrderUser orderUser = new OrderUser();
-        orderUser.setUserId(request.getUserId());
-        orderUser.setCartId(request.getCartId());
-        orderUser.setTotalAmount(totalAmount);
-        orderUser.setPaymentMethod(request.getPaymentMethod());
-        orderUser.setShippingAddress(request.getShippingAddress());
-        orderUser.setStatus(OrderUser.Status.CREATED);
+
 
         orderRepository.save(orderUser);
 
@@ -81,12 +82,35 @@ public class OrderServiceImpl implements IOrderService {
 
             // Giảm stock của sản phẩm
             productService.decreaseStock(cartItem.getProductId(), cartItem.getQuantity());
+            totalAmount = totalAmount +  cartItem.getProductPrice() * cartItem.getQuantity();
         }
 
-        // Sau khi tạo đơn hàng, xoá giỏ hàng (hoặc đánh dấu giỏ hàng là đã thanh toán)
-        cartService.markCartAsCheckedOut(request.getUserId());
+        totalAmount = totalAmount * discountAmount;
 
-        return orderUser;
+        orderUser.setUserId(request.getUserId());
+        orderUser.setCartId(request.getCartId());
+        orderUser.setTotalAmount(totalAmount);
+        orderUser.setPaymentMethod(request.getPaymentMethod());
+        orderUser.setShippingAddress(request.getShippingAddress());
+        orderUser.setStatus(OrderUser.Status.CREATED);
+
+        // Sau khi tạo đơn hàng, xoá giỏ hàng (hoặc đánh dấu giỏ hàng là đã thanh toán)
+        // cartService.markCartAsCheckedOut(request.getUserId());
+
+        CreateOrderResponse createOrder = new CreateOrderResponse();
+        createOrder.setCartId(orderUser.getCartId());
+        createOrder.setUserId(orderUser.getUserId());
+        createOrder.setTotalAmount(totalAmount);
+        createOrder.setStatus(OrderUser.Status.CREATED);
+        createOrder.setPaymentMethod(request.getPaymentMethod());
+        createOrder.setShippingAddress(request.getShippingAddress());
+
+        SendNotificationRequest sendNotificationRequest = new SendNotificationRequest();
+        sendNotificationRequest.setTo(orderUser.getUserId().toString());
+        sendNotificationRequest.setContent("!!!Dat hang thanh cong!!!");
+        //notificationClient.sendNotification(sendNotificationRequest);
+        producer.fire(sendNotificationRequest);
+        return  createOrder;
     }
 
     @Override

@@ -3,9 +3,27 @@ DB_USERNAME: root
 DB_PASSWORD: root
 SERVER_PORT: 8081
 
+RABBIT_MQ_HOST: 192.168.244.133
+RABBIT_MQ_PORT: 5672
+RABBIT_MQ_USER: guest
+RABBIT_MQ_PASSWORD: guest
+RABBIT_MQ_VIRTUAL_HOST: /
+
+QUEUE_SEND_NOTIFICATION_QUEUE_NAME: local.send.notification.queueOrder
+QUEUE_SEND_NOTIFICATION_EXCHANGE: local.send.notification.exchangeOrder
+QUEUE_SEND_NOTIFICATION_ROUTING_KEY: local.send.notification.routing-keyOrder
+
+
 spring:
   sql:
     init:
       mode: always
       schema-locations: classpath:schema.sql
       data-locations: classpath:temp_data.sql
+  security:
+    oauth2:
+      client:
+        provider:
+          user-service-client:
+            token-uri: http://user-service/**
+

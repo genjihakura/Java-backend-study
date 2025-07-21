@@ -9,7 +9,7 @@ public class UpdateProductRequest {
     private Long id;
     private String name;
     private String description;
-    private BigDecimal price;
+    private Double price;
     private int inventory;
     private String brand;
 }

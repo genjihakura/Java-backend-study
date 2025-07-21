@@ -19,6 +19,7 @@ public class SendNotificationProducer implements Producer<SendNotificationReques
   @Override
   public void fire(SendNotificationRequest event) {
     SingleQueueConfigProperties notificationQueue = queueConfigProperties.getSendNotification();
+    System.out.println("user produce fire " + notificationQueue.getRoutingKey()+ " "+ notificationQueue.getRoutingKey());
     rabbitTemplate.convertAndSend(notificationQueue.getExchange(), notificationQueue.getRoutingKey(), event);
   }
 }

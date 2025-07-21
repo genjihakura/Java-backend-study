@@ -38,7 +38,8 @@ public class SecurityConfig {
                 .requestMatchers(
                         "/v3/api-docs/**",     // OpenAPI documentation endpoints
                         "/swagger-ui/**",      // Swagger UI static files
-                        "/swagger-ui.html"// Main Swagger UI endpoint
+                        "/swagger-ui.html",// Main Swagger UI endpoint
+                        "/api/v1/accounts/**"
                 ).permitAll()
                 .anyRequest().authenticated()
         )

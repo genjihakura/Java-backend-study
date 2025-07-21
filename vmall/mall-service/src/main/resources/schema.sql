@@ -35,6 +35,7 @@ CREATE TABLE cart_item (
      id BIGINT PRIMARY KEY AUTO_INCREMENT,
      cart_id BIGINT,
      product_id BIGINT,
+     product_price BIGINT,
      quantity INT
 );
 
@@ -44,7 +45,7 @@ CREATE TABLE order_users  (
     user_id BIGINT,
     cart_id BIGINT,
     total_amount DECIMAL(10,2),
-    status ENUM('CREATED', 'DELIVERY', 'RELEASED', 'CANCELED') NOT NULL,
+    status ENUM('CREATED', 'DELIVERY', 'RELEASED', 'CANCELED'),
     shipping_address VARCHAR(255),
     payment_method VARCHAR(50),
     created_at DATETIME

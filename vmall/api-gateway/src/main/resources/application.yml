@@ -14,7 +14,12 @@ spring:
             - Path=/mall/**
           filters:
             - RewritePath=/mall/(?<segment>.*), /$\{segment}
-
+        - id: user-service
+          uri: lb://user-service
+          predicates:
+            - Path=/user/**
+          filters:
+            - RewritePath=/user/(?<segment>.*), /$\{segment}
 
 eureka:
   instance:

@@ -15,7 +15,7 @@ import java.util.Date;
 @Table(name="order_Users")
 public class OrderUser {
     @Id
-    @Column(name = "Id")
+    @GeneratedValue(strategy=GenerationType.IDENTITY)
     private Long Id;
 
     @Column(name ="user_id")
@@ -25,7 +25,7 @@ public class OrderUser {
     private Long cartId;
 
     @Column(name = "total_amount")
-    private BigDecimal totalAmount;
+    private Double totalAmount;
 
     @Column(name = "shipping_address")
     private String shippingAddress;
@@ -41,7 +41,7 @@ public class OrderUser {
     }
 
     @Column(name = "create_date")
-    private Date createAT;
+    private Date createAT = new Date();
 
     @PrePersist
     public void doCreate(){

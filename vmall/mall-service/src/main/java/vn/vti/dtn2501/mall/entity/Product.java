@@ -25,7 +25,7 @@ public class Product {
     private String brand;
 
     @Column(name="price")
-    private BigDecimal price;
+    private Double price;
 
     @Column(name="inventory")
     private Long inventory;

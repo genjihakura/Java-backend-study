@@ -8,6 +8,6 @@ import java.math.BigDecimal;
 public class CreateProductRequest {
     private String name;
     private String description;
-    private BigDecimal price;
+    private Double price;
     private String brand;
 }

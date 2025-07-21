@@ -4,13 +4,20 @@ import vn.vti.dtn2501.mall.entity.CartItem;
 import vn.vti.dtn2501.mall.payload.request.CreateCartItemRequest;
 import vn.vti.dtn2501.mall.payload.request.UpdateCartItemRequest;
 import vn.vti.dtn2501.mall.payload.response.CreateCartItemResponse;
+import vn.vti.dtn2501.mall.payload.response.UpdateCartItemResponse;
 
 import java.util.List;
 
 public interface ICartItemService {
     CreateCartItemResponse addItemToCart(CreateCartItemRequest request);
+
     void removeItem(Long itemId);
+
     List<CartItem> getItemsByCartId(Long cartId);
-    CartItem updateQuantity(UpdateCartItemRequest request);
+
+    UpdateCartItemResponse updateQuantity(UpdateCartItemRequest request);
+
     void clearCart(Long cartId);
+
+    CartItem getCartItemById(Long cartId);
 }

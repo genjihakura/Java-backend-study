@@ -1,0 +1,5 @@
+queue:
+  send-notification:
+    queue-name: ${QUEUE_SEND_NOTIFICATION_QUEUE_NAME}
+    exchange: ${QUEUE_SEND_NOTIFICATION_EXCHANGE}
+    routing-key: ${QUEUE_SEND_NOTIFICATION_ROUTING_KEY}

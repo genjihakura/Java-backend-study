@@ -27,7 +27,7 @@ public class OrderItem {
     private String productName;
 
     @Column(name = "product_price")
-    private BigDecimal productPrice;
+    private Double productPrice;
 
     @Column(name = "quantity")
     private Long quantity;

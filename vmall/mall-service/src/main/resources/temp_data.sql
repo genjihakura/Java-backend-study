@@ -5,21 +5,29 @@ INSERT INTO product_category (id, name) VALUES
                                             (3, 'Beefsteak');
 
 -- Product
-INSERT INTO product (id, name, price, category_id, description) VALUES
-                                                                    (1, 'Pizza Hải sản', 120000, 1, 'Ngon, nhiều topping'),
-                                                                    (2, 'Trà sữa truyền thống', 30000, 2, 'Trà đen + sữa tươi'),
-                                                                    (3, 'Beefsteak bò Úc', 180000, 3, 'Bò mềm, sốt tiêu đen');
+INSERT INTO product (id, name, price, category_id, description, inventory) VALUES
+                                                                    (1, 'Pizza Hải sản', 120000, 1, 'Ngon, nhiều topping', 111),
+                                                                    (2, 'Trà sữa truyền thống', 30000, 2, 'Trà đen + sữa tươi',111),
+                                                                    (3, 'Beefsteak bò Úc', 180000, 3, 'Bò mềm, sốt tiêu đen',111);
 
 -- Cart
 INSERT INTO cart (id, user_id, status) VALUES
                                            (1, 1, 'ACTIVE'),
-                                           (2, 2, 'IN_ACTIVE');
+                                           (2, 2, 'ACTIVE'),
+                                            (3, 3, 'ACTIVE'),
+                                            (4, 4, 'ACTIVE'),
+                                            (5, 5, 'ACTIVE');
 
 -- CartItem
-INSERT INTO cart_item (id, cart_id, product_id, quantity) VALUES
-                                                              (1, 1, 1, 1),
-                                                              (2, 1, 2, 2),
-                                                              (3, 2, 3, 1);
+INSERT INTO cart_item (id, cart_id, product_id, quantity, product_price ) VALUES
+                                                              (1, 1, 1, 1, 120000),
+                                                              (2, 1, 2, 2, 120000),
+                                                              (3, 2, 3, 1, 180000),
+                                                              (4, 2, 1, 1, 180000),
+                                                              (5, 2, 2, 1, 180000),
+                                                              (6, 3, 3, 1, 180000),
+                                                              (7, 3, 1, 1, 180000),
+                                                              (8, 3, 2, 1, 180000);
 
 -- Order
 INSERT INTO order_users (id, user_id, cart_id, total_amount, status, shipping_address, payment_method, created_at) VALUES

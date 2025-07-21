@@ -56,7 +56,7 @@ public class AccountServiceImpl implements IAccountService {
       SendNotificationRequest sendNotificationRequest = new SendNotificationRequest();
       sendNotificationRequest.setTo(userEntity.getEmail());
       sendNotificationRequest.setContent("Dang ky tai khoan thanh cong!!!");
-//      notificationClient.sendNotification(sendNotificationRequest);
+      //notificationClient.sendNotification(sendNotificationRequest);
       producer.fire(sendNotificationRequest);
       log.info("(createAccount)Send notification to user [{}] done!",
           userEntity.getUsername());
@@ -83,7 +83,7 @@ public class AccountServiceImpl implements IAccountService {
     UserDto userDto = new UserDto();
     userDto.setId(optional.get().getId());
     userDto.setEmail(optional.get().getEmail());
-    userDto.setName(optional.get().getUsername());
+    userDto.setName(optional.get().getName());
 
     return userDto;
   }

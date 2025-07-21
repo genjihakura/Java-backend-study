@@ -1,6 +1,7 @@
 package vn.vti.dtn2501.mall.service.impl;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import vn.vti.dtn2501.common.api.exeption.VMallException;
 import vn.vti.dtn2501.mall.entity.CartItem;
@@ -9,6 +10,7 @@ import vn.vti.dtn2501.mall.exception.ExceptionEnum;
 import vn.vti.dtn2501.mall.payload.request.CreateCartItemRequest;
 import vn.vti.dtn2501.mall.payload.request.UpdateCartItemRequest;
 import vn.vti.dtn2501.mall.payload.response.CreateCartItemResponse;
+import vn.vti.dtn2501.mall.payload.response.UpdateCartItemResponse;
 import vn.vti.dtn2501.mall.repository.CartItemRepository;
 import vn.vti.dtn2501.mall.repository.ProductRepository;
 import vn.vti.dtn2501.mall.service.ICartItemService;
@@ -65,15 +67,24 @@ public class CartItemServiceImpl implements ICartItemService {
     }
 
     @Override
-    public CartItem updateQuantity(UpdateCartItemRequest request) {
-        CartItem item = cartItemRepository.findById(request.getItemId())
-                .orElseThrow(() -> new RuntimeException("Cart item not found"));
-        item.setQuantity(request.getQuantity());
-        return cartItemRepository.save(item);
+    public UpdateCartItemResponse updateQuantity(UpdateCartItemRequest request) {
+        Optional<CartItem> optional = cartItemRepository.findByCartIdAndProductId(request.getCartId(),request.getItemId());
+        if (optional.isEmpty()){
+            throw new VMallException(ExceptionEnum.PRODUCT_NAME_NOT_FIND);
+        }
+        CartItem cartItem = optional.get();
+        cartItem.setQuantity(cartItem.getQuantity() + request.getQuantity());
+        CartItem saveCartItem = cartItemRepository.save(cartItem);
+        return new UpdateCartItemResponse(saveCartItem.getCartId(), saveCartItem.getProductId(), saveCartItem.getQuantity());
     }
 
     @Override
     public void clearCart(Long cartId) {
         cartItemRepository.deleteAllByCartId(cartId);
+    }
+
+    @Override
+    public CartItem getCartItemById(Long cartId) {
+        return cartItemRepository.findById(cartId).get();
     }
 }
