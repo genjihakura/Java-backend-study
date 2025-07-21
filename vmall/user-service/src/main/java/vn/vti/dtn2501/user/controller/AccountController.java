@@ -26,7 +26,7 @@ public class AccountController {
     return ResponseEntity.noContent().build();
   }
 
-  @GetMapping("/{id}")
+  @GetMapping("/userclient/{id}")
   public UserDto getUserById(@PathVariable Long id) {
     UserDto user = accountService.getUserById(id);
     if (user == null) {

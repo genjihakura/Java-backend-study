@@ -20,5 +20,6 @@ public class SendNotificationListener {
     log.info("(listenSendNotificationRequest)target: [{}] with content: [{}]",
         sendNotificationRequest.getTo(),
         sendNotificationRequest.getContent());
+
   }
 }

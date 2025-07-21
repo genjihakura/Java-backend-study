@@ -39,8 +39,8 @@ public class OrderServiceImpl implements IOrderService {
     private final CartRepository cartRepository;
     private final NotificationClient notificationClient;
     private final Producer<SendNotificationRequest> producer;
-    @Value("${discountAmount}")
-    private double discountAmount = 1;
+    @Value("${discountAmount:1}")
+    private double discountAmount;
 
     @Transactional
     @Override
@@ -107,8 +107,8 @@ public class OrderServiceImpl implements IOrderService {
 
         SendNotificationRequest sendNotificationRequest = new SendNotificationRequest();
         sendNotificationRequest.setTo(orderUser.getUserId().toString());
-        sendNotificationRequest.setContent("!!!Dat hang thanh cong!!!");
-        //notificationClient.sendNotification(sendNotificationRequest);
+        sendNotificationRequest.setContent("!!!khac hang: "+ orderUser.getUserId().toString() + " Dat hang thanh cong!!!");
+        notificationClient.sendNotification(sendNotificationRequest);
         producer.fire(sendNotificationRequest);
         return  createOrder;
     }

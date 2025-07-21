@@ -9,9 +9,9 @@ RABBIT_MQ_USER: guest
 RABBIT_MQ_PASSWORD: guest
 RABBIT_MQ_VIRTUAL_HOST: /
 
-QUEUE_SEND_NOTIFICATION_QUEUE_NAME: local.send.notification.queueOrder
-QUEUE_SEND_NOTIFICATION_EXCHANGE: local.send.notification.exchangeOrder
-QUEUE_SEND_NOTIFICATION_ROUTING_KEY: local.send.notification.routing-keyOrder
+QUEUE_SEND_NOTIFICATION_QUEUE_NAME: local.send.notification.queue
+QUEUE_SEND_NOTIFICATION_EXCHANGE: local.send.notification.exchange
+QUEUE_SEND_NOTIFICATION_ROUTING_KEY: local.send.notification.routing-key
 
 
 spring:

@@ -52,6 +52,7 @@ public class SecurityConfig {
                         "/swagger-ui.html"// Main Swagger UI endpoint
                 ).permitAll()
                 .requestMatchers("/api/v1/accounts", "login").permitAll()
+                .requestMatchers("/api/v1/accounts", "userclient/**").permitAll()
                 .anyRequest().authenticated()
         )
         // Form login handles the redirect to the login page from the

@@ -9,6 +9,6 @@ import vn.vti.dtn2501.mall.entity.users.UserDto;
 @FeignClient(name = "user-service")
 public interface UserClient {
 
-    @GetMapping("/api/v1/accounts/{id}")
+    @GetMapping("/api/v1/accounts/userclient/{id}")
     UserDto getUserById(@PathVariable Long id);
 }
