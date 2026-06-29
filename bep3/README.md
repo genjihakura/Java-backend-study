@@ -1,15 +1,15 @@
-#Bep3 - Microservices Learning Project
+# Bep3 - Microservices Learning Project
 
 Thư mục `bep3` là một phần trong hành trình nghiên cứu và thử nghiệm kiến trúc **Microservices** thuộc repository `Java-backend-study` (nhánh `microservice`). Dự án này được xây dựng với mục tiêu chính là **học tập, nghiên cứu và tìm hiểu sâu về các công nghệ, hệ sinh thái xung quanh ngôn ngữ Java** và cách vận hành một hệ thống phân tán.
 
-##Mục Tiêu Dự Án
+## Mục Tiêu Dự Án
 * **Tìm hiểu công nghệ Java:** Áp dụng các kiến thức cốt lõi của Java và framework Spring Boot vào bài toán thực tế.
 * **Kiến trúc Microservices:** Chia nhỏ hệ thống thành các dịch vụ độc lập (services), tìm hiểu cách chúng giao tiếp và phối hợp vận hành.
 * **Làm quen với Ecosystem của Spring Cloud:** Thử nghiệm các công cụ hỗ trợ quản lý hệ thống phân tán.
 
 ---
 
-##Công Nghệ & Công Cụ Sử Dụng
+## Công Nghệ & Công Cụ Sử Dụng
 
 ### 1. Core Tech Stack
 * **Java**: Ngôn ngữ lập trình chính dùng để tìm hiểu cấu trúc và tư duy thiết kế hệ thống backend.
@@ -28,7 +28,7 @@ Thư mục `bep3` là một phần trong hành trình nghiên cứu và thử ng
 
 ---
 
-## 📐 Kiến Trúc Tổng Quan (Cấu trúc thư mục)
+## Kiến Trúc Tổng Quan (Cấu trúc thư mục)
 
 Thư mục `bep3` được tổ chức theo mô hình phân rã dịch vụ:
 
@@ -40,6 +40,7 @@ bep3/
 ├── [service-name-1]/     # Dịch vụ nghiệp vụ 1 (Ví dụ: user-service, product-service...)
 ├── [service-name-2]/     # Dịch vụ nghiệp vụ 2
 └── README.md             # Tài liệu hướng dẫn dự án
+```
 
 # Nhật Ký Học Tập & Bài Học Rút Ra
 - Dự án này được thực hiện với tinh thần thực hành để thấu hiểu công nghệ (Hands-on Learning):
